@@ -1,0 +1,197 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Add a New Service Agent</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="https://storage.cloud.google.com/exl-hackathon/AppointmentApp/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="https://storage.cloud.google.com/exl-hackathon/AppointmentApp/assets/css/noscript.css" /></noscript>
+	</head>
+	
+	<!-- Scripts -->
+			
+	<script src="https://storage.cloud.google.com/exl-hackathon/AppointmentApp/assets/js/jquery.dropotron.min.js"></script>
+	<script src="https://storage.cloud.google.com/exl-hackathon/AppointmentApp/assets/js/jquery.scrolly.min.js"></script>
+	<script src="https://storage.cloud.google.com/exl-hackathon/AppointmentApp/assets/js/jquery.scrollex.min.js"></script>
+	<script src="https://storage.cloud.google.com/exl-hackathon/AppointmentApp/assets/js/browser.min.js"></script>
+	<script src="https://storage.cloud.google.com/exl-hackathon/AppointmentApp/assets/js/breakpoints.min.js"></script>
+	<script src="https://storage.cloud.google.com/exl-hackathon/AppointmentApp/assets/js/util.js"></script>
+	<script src="https://storage.cloud.google.com/exl-hackathon/AppointmentApp/assets/js/main.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="https://storage.cloud.google.com/exl-hackathon/AppointmentApp/JSONForm/deps/opt/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="https://storage.cloud.google.com/exl-hackathon/AppointmentApp/JSONForm/deps/opt/bootstrap-wysihtml5.css" />
+	<link rel="stylesheet" type="text/css" href="https://storage.cloud.google.com/exl-hackathon/AppointmentApp/JSONForm/deps/opt/spectrum.css" />
+	
+	<script type="text/javascript" src="https://storage.cloud.google.com/exl-hackathon/AppointmentApp/JSONForm/deps/jquery.min.js"></script>
+	
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+	<script type="text/javascript" src="https://storage.cloud.google.com/exl-hackathon/AppointmentApp/JSONForm/deps/underscore.js"></script>
+	<script type="text/javascript" src="https://storage.cloud.google.com/exl-hackathon/AppointmentApp/JSONForm/deps/opt/jsv.js"></script>
+	<script type="text/javascript" src="https://storage.cloud.google.com/exl-hackathon/AppointmentApp/JSONForm/lib/jsonform.js"></script>
+
+	<script src="https://ej2.syncfusion.com/javascript/demos/grid/grid-overview/datasource.js" type="text/javascript"></script>
+	<script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js" type="text/javascript"></script>
+	<link href="https://cdn.syncfusion.com/ej2/material.css" rel="stylesheet">
+			
+	<body class="left-sidebar is-preload">
+	<div id="page-wrapper">
+		<!-- Header -->
+		<div id="header">
+			<!-- Inner -->
+				<div class="inner">
+					<header>
+						<h1><a href="index.html" id="logo">Add a Service Agent</a></h1>
+					</header>
+				</div>
+			<!-- Nav -->
+				<nav id="nav">
+
+					<ul>
+					<li><a href="index.html">Home</a></li>
+					<li><a href="GetUserAppointments.html">Schedule Appointments</a></li>
+					<li><a href="Settings.html">Settings</a></li>
+					</ul>
+				</nav>
+		</div>
+	</div>
+       
+	<form style="width: 50%;margin-left: 29px;margin-top: 2%;"></form>
+		
+	<div id="res" class="alert"></div>
+	<div class="row">
+		<div id="spinner" style="display:none;position: relative; text-align: center; top: 100px;"><img src="https://storage.googleapis.com/databenchcdn/images/Content/loader.gif" style="width:20px;" /></div>
+		<div id="Grid">
+		</div>
+	</div>
+    
+	<script type="text/javascript">
+	function httpGet(theUrl) {
+
+		let xmlhttp;
+
+		if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp = new XMLHttpRequest();
+		} else { // code for IE6, IE5
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+
+		xmlhttp.onreadystatechange = function () {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				return xmlhttp.responseText;
+			}
+		}
+		xmlhttp.open("GET", theUrl, false);
+		xmlhttp.send();
+
+		return xmlhttp.response;
+		}
+
+        alert(sessionStorage.getItem("AgentSessionData"));
+        var AgentUpdateData = JSON.parse(sessionStorage.getItem("AgentSessionData"))
+        
+		//Create multiple Appointments by selecting + and - buttons
+		$('form').jsonForm({
+			"schema": {
+				"AgentID": {
+					"type": "integer",
+					"title": "Agent ID",
+					"required": true,
+					"description": "Enter Unique ID"
+				},
+				"AgentName": {
+					"type": "string",
+					"title": "Agent Name",
+					"required": true,
+					"description": "Enter Agent Name"
+				},
+				"Email": {
+					"type": "string",
+					"title": "Email Address"
+				},
+				"MobileNumber": {
+					"type": "integer",
+					"title": "Mobile Number"
+				}
+
+			},
+            "value": {
+                "AgentID": `${AgentUpdateData.ID}`,
+                "AgentName": `${AgentUpdateData.Name}`,
+                "Email": `${AgentUpdateData.Email}`,
+                "MobileNumber": `${AgentUpdateData.Phone}`
+            },
+			onSubmit: function (errors, values) {
+				debugger
+				if (errors) {
+					$('#res').html('<p>Please fill required fields!</p>');
+				}
+				else {
+					$("#spinner").show();
+
+					var queryObj = {}
+					var queries = [];
+					queryObj.type = "CreateAppointment";
+					queryObj.bucketName = "exl-appointment-db";
+					queryObj.dbName = "SchedulingRouting.db";
+					queryObj.tabName = "Appointments";
+					queryObj.queries = [];
+					//alert('INSERT INTO ServiceAgent(ID,Name,Email,Phone) VALUES (' + "'" + values.AgentID + "'" + "," + "'" + values.AgentName + "'" + "," + "'" + values.Email + "'" + "," + "'" + values.MobileNumber + "'" + ')');
+                    alert("UPDATE ServiceAgent SET Name = '" + values.AgentName + "',Email = '" + values.Email + "',Phone = '" + values.MobileNumber + "' WHERE ID =" + values.AgentID);
+                    queries.push("UPDATE ServiceAgent SET Name = '" + values.AgentName + "',Email = '" + values.Email + "',Phone = '" + values.MobileNumber + "' WHERE ID =" + values.AgentID );
+					queryObj.queries = queries;
+					var finalParams = JSON.stringify(queryObj);
+					console.log(finalParams);
+
+					var mydata = JSON.parse(httpGet("https://chart-api-c7qrsmhagq-uc.a.run.app?dbParams=" + JSON.stringify(queryObj)));
+					alert(mydata);
+
+				}
+			}
+		});
+				
+	</script>
+	
+
+			
+<!-- Footer -->
+	<div id="footer">
+		<div class="container">
+
+			<div class="row">
+				<div class="col-12">
+
+					<!-- Contact -->
+						<section class="contact">
+							<ul class="icons">
+								<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+								<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+								<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+								<li><a href="#" class="icon brands fa-pinterest"><span class="label">Pinterest</span></a></li>
+								<li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
+								<li><a href="#" class="icon brands fa-linkedin-in"><span class="label">Linkedin</span></a></li>
+							</ul>
+						</section>
+
+					<!-- Copyright -->
+						<!-- Copyright -->
+						<div class="copyright">
+							<ul class="menu">
+								<li>&copy; Exclusively and Proudly made for EXL Hackathon</li>
+							</ul>
+						</div>
+
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+		
+	</body>
+</html>
